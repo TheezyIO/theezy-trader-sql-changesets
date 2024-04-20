@@ -23,7 +23,7 @@ jobs:
         name: Install mysql version 8
         with:
           mysql-version: '8.0'
-          root-password: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          password: ${{ secrets.MYSQL_ROOT_PASSWORD }}
       - uses: keithweaver/aws-s3-github-action@v1.0.0
         with:
           command: cp

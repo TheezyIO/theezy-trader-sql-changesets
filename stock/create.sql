@@ -4,5 +4,5 @@ CREATE TABLE stock (
 	name VARCHAR(50) NOT NULL,
 	symbol VARCHAR(7) NOT NULL,
 
-	UNIQUE KEYS stock_symbol_unique_idx (symbol)
+	UNIQUE KEY stock_symbol_unique_idx (symbol)
 );

@@ -12,7 +12,7 @@ env:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    names: run_schematic_validation
+    name: run_schematic_validation
     steps:
       - uses: actions/checkout@v4
         name: Checkout repository

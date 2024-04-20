@@ -1,0 +1,44 @@
+# This workflow deploys the database schematic changes to a specified environment
+name: deploy-changeset
+
+on:
+  push:
+    branches: [ "master" ]
+
+env:
+  MYSQL_HOST: data.gscbinc.com
+  MYSQL_PORT: 3306
+  CHANGES_FILE: changes.txt
+  CHANGES_TABLE: theezy_trader
+  LOGIN_PATH: remote
+
+jobs:
+  sandbox-deployment:
+    runs-on: ubuntu-latest
+    environment: sandbox
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout repository
+      - uses: shogo82148/actions-setup-mysql@v1
+        name: Install mysql version 8
+        with:
+          mysql-version: '8.0'
+      - uses: keithweaver/aws-s3-github-action@v1.0.0
+        name: Download database changesets scripts from S3
+        with:
+          command: cp
+          source: s3://theezy-app/dbcc.sh
+          destination: ./dbcc.sh
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: us-east-1
+      - name: Generate MySQL login file
+        run: mysql_config_editor set --login-path=remote --user theezy_trader_sandbox_manager --host data.gscbinc.com
+      - name: Execute database changesets
+        run: bash ./dbcc.sh
+        env:
+          APP_DB: theezy_trader_sandbox
+          CHANGES_ENV: sandbox
+          CHANGES_HOME: ${{ github.workspace }}
+          MYSQL_PWD: ${{ secrets.MYSQL_PASSWORD }}
+

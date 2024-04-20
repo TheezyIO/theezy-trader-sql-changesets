@@ -3,7 +3,7 @@ name: validate-schematic
 
 on:
   pull_request:
-    branches: [ "main" ]
+    branches: [ "master" ]
 
 env:
   MYSQL_DB: theezy_trader_schematic_check

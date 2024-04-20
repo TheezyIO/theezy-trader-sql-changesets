@@ -1,0 +1,39 @@
+# This workflow validates that there are no errors in the sql schematic instructions
+name: validate-schematic
+
+on:
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  MYSQL_HOST: localhost
+  MYSQL_USER: schematic_check_user
+  MYSQL_PWD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+  MYSQL_DB: theezy_trader_schematic_check
+  CHANGES_FILE: changes.txt
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    name: run_schematic_validation
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout repository
+      - uses: shogo82148/actions-setup-mysql@v1
+        name: Install mysql version 8
+        with:
+          mysql-version: '8.0'
+          user: schematic_check_user
+          password: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+      - uses: keithweaver/aws-s3-github-action@v1.0.0
+        with:
+          command: cp
+          source: s3://theezy-app/scheck.sh
+          destination: ./scheck.sh
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: us-east-1
+      - name: Run schematic check
+        env:
+          CHANGES_HOME: ${{ github.workspace }}
+        run: bash ./scheck.sh

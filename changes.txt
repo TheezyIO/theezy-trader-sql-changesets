@@ -1,0 +1,8 @@
+/stock/create.sql
+/stock_price/create.sql
+/stock_option/create.sql
+/transaction_type/create.sql
+/transaction_type/seed_data.sql
+/transaction/create.sql
+/simulation/create.sql
+/simulation_transaction/create.sql

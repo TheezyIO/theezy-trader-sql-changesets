@@ -8,7 +8,7 @@ on:
 env:
   MYSQL_HOST: localhost
   MYSQL_USER: root
-  MYSQL_PWD: ""
+  MYSQL_PWD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
   MYSQL_DB: theezy_trader_schematic_check
   CHANGES_FILE: changes.txt
 
@@ -23,6 +23,7 @@ jobs:
         name: Install mysql version 8
         with:
           mysql-version: '8.0'
+          root-password: ${{ secrets.MYSQL_ROOT_PASSWORD }}
       - uses: keithweaver/aws-s3-github-action@v1.0.0
         with:
           command: cp

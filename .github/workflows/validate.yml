@@ -6,6 +6,8 @@ on:
     branches: [ "master" ]
 
 env:
+  MYSQL_HOST: localhost
+  MYSQL_USER: root
   MYSQL_DB: theezy_trader_schematic_check
   CHANGES_FILE: changes.txt
 
@@ -23,7 +25,7 @@ jobs:
       - uses: keithweaver/aws-s3-github-action@v1.0.0
         with:
           command: cp
-          source: s3://theezy-app/scheck_v2.sh
+          source: s3://theezy-app/scheck.sh
           destination: ./scheck.sh
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -31,5 +33,4 @@ jobs:
       - name: Run schematic check
         env:
           CHANGES_HOME: ${{ github.workspace }}
-          LOGIN_PATH: root
         run: bash ./scheck.sh

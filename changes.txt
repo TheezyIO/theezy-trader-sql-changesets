@@ -6,3 +6,7 @@
 /transaction/create.sql
 /simulation/create.sql
 /simulation_transaction/create.sql
+/stock_price/add_column_timestamp.sql
+/stock_option/add_column_timestamp.sql
+/transaction/add_column_timestamp.sql
+/transaction_type/include_appreciate_depreciate_funding_types.sql
